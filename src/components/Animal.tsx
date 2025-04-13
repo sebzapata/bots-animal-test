@@ -11,6 +11,33 @@ type AnimalProps = {
   breed: string;
 };
 
+const dogsList = ["Basset hound", "Chow chow", "Droopy dog"];
+const catsList = ["Ginger cat", "Brown cat"];
+
+const getHappinessMeterColour = (meterValue: number) => {
+  if (meterValue >= 50) {
+    return "#4caf50";
+  }
+
+  if (meterValue >= 20) {
+    return "#f5a742";
+  }
+
+  return "#f50000";
+};
+
+const getHungerOrSleepMeterColour = (meterValue: number) => {
+  if (meterValue >= 80) {
+    return "#f50000";
+  }
+
+  if (meterValue >= 50) {
+    return "#f5a742";
+  }
+
+  return "#4caf50";
+};
+
 const Animal = ({ name, breed }: AnimalProps) => {
   const [happiness, setHappiness] = useState<Metric>({
     date: new Date(),
@@ -22,7 +49,7 @@ const Animal = ({ name, breed }: AnimalProps) => {
     baseLevel: 60,
     level: 60,
   });
-  const [sleep, setSleep] = useState<Metric>({
+  const [sleepiness, setSleepiness] = useState<Metric>({
     date: new Date(),
     baseLevel: 50,
     level: 50,
@@ -68,22 +95,22 @@ const Animal = ({ name, breed }: AnimalProps) => {
     });
   };
 
-  const increaseSleep = () => {
+  const decreaseSleepiness = () => {
     const dateRested = new Date();
 
-    setSleep((prevState) => {
-      if (prevState.level <= 95) {
+    setSleepiness((prevState) => {
+      if (prevState.level >= 5) {
         return {
           date: dateRested,
-          baseLevel: prevState.level + 5,
-          level: prevState.level + 5,
+          baseLevel: prevState.level - 5,
+          level: prevState.level - 5,
         };
       }
 
       return {
         date: dateRested,
-        baseLevel: 100,
-        level: 100,
+        baseLevel: 0,
+        level: 0,
       };
     });
   };
@@ -99,31 +126,66 @@ const Animal = ({ name, breed }: AnimalProps) => {
           (currentTime.getTime() - happiness.date.getTime()) / 1000
         );
 
+        let happinessDecreaseFactor;
+
+        if (dogsList.includes(breed)) {
+          happinessDecreaseFactor = 1.25;
+        } else if (catsList.includes(breed)) {
+          happinessDecreaseFactor = 0.8;
+        } else {
+          happinessDecreaseFactor = 1;
+        }
+
         setHappiness((prevState) => ({
           ...prevState,
-          level: prevState.baseLevel - timeSinceLastPlay,
+          level: Math.round(
+            prevState.baseLevel - timeSinceLastPlay * happinessDecreaseFactor
+          ),
         }));
       }
 
       if (hunger.level < 100) {
-        const timeSinceLastFeed = Math.round(
-          (currentTime.getTime() - hunger.date.getTime()) / 1000
-        );
+        const timeSinceLastFeed =
+          (currentTime.getTime() - hunger.date.getTime()) / 1000;
+
+        let hungerIncreaseFactor;
+
+        if (dogsList.includes(breed)) {
+          hungerIncreaseFactor = 0.9;
+        } else if (catsList.includes(breed)) {
+          hungerIncreaseFactor = 1.2;
+        } else {
+          hungerIncreaseFactor = 0.1;
+        }
 
         setHunger((prevState) => ({
           ...prevState,
-          level: prevState.baseLevel + timeSinceLastFeed,
+          level: Math.round(
+            prevState.baseLevel + timeSinceLastFeed * hungerIncreaseFactor
+          ),
         }));
       }
 
-      if (sleep.level > 0) {
+      if (sleepiness.level < 100) {
         const timeSinceLastRest = Math.round(
-          (currentTime.getTime() - sleep.date.getTime()) / 1000
+          (currentTime.getTime() - sleepiness.date.getTime()) / 1000
         );
 
-        setSleep((prevState) => ({
+        let sleepinessIncreaseFactor;
+
+        if (dogsList.includes(breed)) {
+          sleepinessIncreaseFactor = 0.7;
+        } else if (catsList.includes(breed)) {
+          sleepinessIncreaseFactor = 1.3;
+        } else {
+          sleepinessIncreaseFactor = 0.3;
+        }
+
+        setSleepiness((prevState) => ({
           ...prevState,
-          level: prevState.baseLevel - timeSinceLastRest,
+          level: Math.round(
+            prevState.baseLevel + timeSinceLastRest * sleepinessIncreaseFactor
+          ),
         }));
       }
     }, refreshTime);
@@ -132,12 +194,13 @@ const Animal = ({ name, breed }: AnimalProps) => {
       clearInterval(interval);
     };
   }, [
+    breed,
     happiness.date,
     happiness.level,
     hunger.date,
     hunger.level,
-    sleep.date,
-    sleep.level,
+    sleepiness.date,
+    sleepiness.level,
   ]);
 
   return (
@@ -158,7 +221,10 @@ const Animal = ({ name, breed }: AnimalProps) => {
             <div className="meter">
               <div
                 className="meter-fill"
-                style={{ width: `${hunger.level}%` }}
+                style={{
+                  width: `${hunger.level}%`,
+                  backgroundColor: getHungerOrSleepMeterColour(hunger.level),
+                }}
               ></div>
             </div>
             <button
@@ -174,7 +240,10 @@ const Animal = ({ name, breed }: AnimalProps) => {
             <div className="meter">
               <div
                 className="meter-fill"
-                style={{ width: `${happiness.level}%` }}
+                style={{
+                  width: `${happiness.level}%`,
+                  backgroundColor: getHappinessMeterColour(happiness.level),
+                }}
               ></div>
             </div>
 
@@ -187,17 +256,22 @@ const Animal = ({ name, breed }: AnimalProps) => {
             </button>
           </div>
           <div className="stat">
-            <strong>{`Sleep: ${sleep.level}`}</strong>
+            <strong>{`Sleepiness: ${sleepiness.level}`}</strong>
             <div className="meter">
               <div
                 className="meter-fill"
-                style={{ width: `${sleep.level}%` }}
+                style={{
+                  width: `${sleepiness.level}%`,
+                  backgroundColor: getHungerOrSleepMeterColour(
+                    sleepiness.level
+                  ),
+                }}
               ></div>
             </div>
             <button
               className="action-button"
-              onClick={increaseSleep}
-              disabled={sleep.level >= 100}
+              onClick={decreaseSleepiness}
+              disabled={sleepiness.level <= 0}
             >
               Rest
             </button>
