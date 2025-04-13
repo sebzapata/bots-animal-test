@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./App.css";
-import Animal from "./components/Animal";
 import AddAnimal from "./components/AddAnimal";
+import Animal from "./components/Animal";
 
 export type PetInfo = {
   name: string;

@@ -122,9 +122,8 @@ const Animal = ({ name, breed }: AnimalProps) => {
       const currentTime = new Date();
 
       if (happiness.level > 0) {
-        const timeSinceLastPlay = Math.round(
-          (currentTime.getTime() - happiness.date.getTime()) / 1000
-        );
+        const timeSinceLastPlay =
+          (currentTime.getTime() - happiness.date.getTime()) / 1000;
 
         let happinessDecreaseFactor;
 
@@ -177,9 +176,8 @@ const Animal = ({ name, breed }: AnimalProps) => {
       }
 
       if (sleepiness.level < 100) {
-        const timeSinceLastRest = Math.round(
-          (currentTime.getTime() - sleepiness.date.getTime()) / 1000
-        );
+        const timeSinceLastRest =
+          (currentTime.getTime() - sleepiness.date.getTime()) / 1000;
 
         let sleepinessIncreaseFactor;
 

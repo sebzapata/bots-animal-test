@@ -1,6 +1,6 @@
 import { useState } from "react";
-import "./addAnimal.css";
 import { PetInfo } from "../App";
+import "./addAnimal.css";
 
 type AddAnimalProps = {
   setIsSideDrawerOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -34,8 +34,9 @@ const AddAnimal = ({ setIsSideDrawerOpen, setListOfPets }: AddAnimalProps) => {
       <div className="addAnimalDrawer--form">
         <div>
           <div>
-            <label>Pet's name:</label>
+            <label htmlFor="petName">Pet's name:</label>
             <input
+              id="petName"
               className="addAnimalDrawer--form--input"
               onChange={(e) => setPetName(e.target.value)}
               value={petName}
@@ -43,8 +44,8 @@ const AddAnimal = ({ setIsSideDrawerOpen, setListOfPets }: AddAnimalProps) => {
           </div>
           <div className="addAnimalDrawer--form--selectBreed">
             <div>
-              <label>Pet breed:</label>
-              <ul>
+              <label htmlFor="petBreed">Pet breed:</label>
+              <ul id="petBreed">
                 {petOptions.map((petOption) => (
                   <li key={petOption}>
                     <input
@@ -52,7 +53,7 @@ const AddAnimal = ({ setIsSideDrawerOpen, setListOfPets }: AddAnimalProps) => {
                       onChange={() => setPetBreed(petOption)}
                       checked={petBreed === petOption}
                       id={petOption}
-                    ></input>
+                    />
                     <label htmlFor={petOption}>{petOption}</label>
                   </li>
                 ))}
