@@ -1,0 +1,47 @@
+.addAnimalDrawer {
+  height: 100%;
+  position: absolute;
+  width: 35%;
+  border-right: gray 2px solid;
+  background-color: white;
+  padding: 0 3rem;
+
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.addAnimalDrawer--header {
+  font-size: small;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.addAnimalDrawer--header--button {
+  font-size: x-large;
+  cursor: pointer;
+}
+
+.addAnimalDrawer--header--button:hover {
+  opacity: 80%;
+}
+
+.addAnimalDrawer--form {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  font-size: x-large;
+
+  input {
+    margin-left: 1rem;
+  }
+
+  button {
+    margin-bottom: 2rem;
+  }
+}
