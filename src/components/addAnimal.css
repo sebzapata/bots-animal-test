@@ -37,11 +37,30 @@
 
   font-size: x-large;
 
-  input {
-    margin-left: 1rem;
-  }
-
   button {
     margin-bottom: 2rem;
   }
+
+  ul {
+    padding: 0;
+    margin-top: 0;
+  }
+
+  li {
+    list-style: none;
+
+    label {
+      margin-left: 1rem;
+    }
+  }
+}
+
+.addAnimalDrawer--form--selectBreed {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.addAnimalDrawer--form--input {
+  margin-left: 1rem;
 }

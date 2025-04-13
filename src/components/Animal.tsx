@@ -8,9 +8,10 @@ type Metric = {
 
 type AnimalProps = {
   name: string;
+  breed: string;
 };
 
-const Animal = ({ name }: AnimalProps) => {
+const Animal = ({ name, breed }: AnimalProps) => {
   const [happiness, setHappiness] = useState<Metric>({
     date: new Date(),
     baseLevel: 80,
@@ -142,10 +143,10 @@ const Animal = ({ name }: AnimalProps) => {
   return (
     <>
       <div className="animal-container">
-        <h1>Poodle</h1>
+        <h1>{breed}</h1>
         <div className="animal-animal">
           <img
-            src="src/poodle.svg"
+            src={`src/petImages/${breed}.svg`}
             alt="Your animal"
             className="animal-image"
           />
