@@ -41,13 +41,13 @@ const getHungerOrSleepMeterColour = (meterValue: number) => {
 const Animal = ({ name, breed }: AnimalProps) => {
   const [happiness, setHappiness] = useState<Metric>({
     date: new Date(),
-    baseLevel: 80,
-    level: 80,
+    baseLevel: 50,
+    level: 50,
   });
   const [hunger, setHunger] = useState<Metric>({
     date: new Date(),
-    baseLevel: 60,
-    level: 60,
+    baseLevel: 50,
+    level: 50,
   });
   const [sleepiness, setSleepiness] = useState<Metric>({
     date: new Date(),
@@ -141,13 +141,17 @@ const Animal = ({ name, breed }: AnimalProps) => {
           happinessDecreaseFactor = 1;
         }
 
-        setHappiness((prevState) => ({
-          ...prevState,
-          level: Math.round(
+        setHappiness((prevState) => {
+          const newHappinessLevel = Math.round(
             prevState.baseLevel -
               timeSinceLastPlay * happinessDecreaseFactor * sleepAndHungerFactor
-          ),
-        }));
+          );
+
+          return {
+            ...prevState,
+            level: newHappinessLevel <= 0 ? 0 : newHappinessLevel,
+          };
+        });
       }
 
       if (hunger.level < 100) {
@@ -242,7 +246,7 @@ const Animal = ({ name, breed }: AnimalProps) => {
             </button>
           </div>
           <div className="stat">
-            <strong>{`Happiness: ${happiness.level}`}</strong>
+            <strong data-testid="happinessLevel">{`Happiness: ${happiness.level}`}</strong>
             <div className="meter">
               <div
                 className="meter-fill"

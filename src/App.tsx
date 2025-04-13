@@ -35,8 +35,12 @@ function App() {
             one.
           </p>
         )}
-        {listOfPets.map((pet) => (
-          <Animal name={pet.name} breed={pet.breed} />
+        {listOfPets.map((pet, index) => (
+          <Animal
+            name={pet.name}
+            breed={pet.breed}
+            key={`${pet.name}-${index}`}
+          />
         ))}
       </div>
     </div>

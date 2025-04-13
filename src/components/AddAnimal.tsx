@@ -46,7 +46,7 @@ const AddAnimal = ({ setIsSideDrawerOpen, setListOfPets }: AddAnimalProps) => {
               <label>Pet breed:</label>
               <ul>
                 {petOptions.map((petOption) => (
-                  <li>
+                  <li key={petOption}>
                     <input
                       type="radio"
                       onChange={() => setPetBreed(petOption)}
@@ -67,6 +67,7 @@ const AddAnimal = ({ setIsSideDrawerOpen, setListOfPets }: AddAnimalProps) => {
             )}
           </div>
         </div>
+
         <button
           onClick={() => {
             setListOfPets((prevState) => [
