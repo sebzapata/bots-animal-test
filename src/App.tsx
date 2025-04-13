@@ -1,6 +1,47 @@
+import { useEffect, useState } from "react";
 import "./App.css";
 
 const Animal = () => {
+  const [happinessLevel, setHappinessLevel] = useState({
+    date: new Date(),
+    happinessLevel: 80,
+  });
+
+  const increaseHappiness = () => {
+    const datePlayedWith = new Date();
+
+    setHappinessLevel((prevState) => {
+      if (prevState.happinessLevel <= 95) {
+        return {
+          date: datePlayedWith,
+          happinessLevel: prevState.happinessLevel + 5,
+        };
+      }
+
+      return {
+        date: datePlayedWith,
+        happinessLevel: 100,
+      };
+    });
+  };
+
+  useEffect(() => {
+    const refreshTime = 1000;
+
+    const interval = setInterval(() => {
+      if (happinessLevel.happinessLevel > 0) {
+        setHappinessLevel((prevState) => ({
+          ...prevState,
+          happinessLevel: prevState.happinessLevel - 1,
+        }));
+      }
+    }, refreshTime);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [happinessLevel.happinessLevel]);
+
   return (
     <>
       <div className="animal-container">
@@ -22,11 +63,21 @@ const Animal = () => {
             <button className="action-button">Feed</button>
           </div>
           <div className="stat">
-            <strong>Happiness:</strong>
+            <strong>{`Happiness: ${happinessLevel.happinessLevel}`}</strong>
             <div className="meter">
-              <div className="meter-fill" style={{ width: "80%" }}></div>
+              <div
+                className="meter-fill"
+                style={{ width: `${happinessLevel.happinessLevel}%` }}
+              ></div>
             </div>
-            <button className="action-button">Play</button>
+
+            <button
+              className="action-button"
+              onClick={increaseHappiness}
+              disabled={happinessLevel.happinessLevel >= 100}
+            >
+              Play
+            </button>
           </div>
           <div className="stat">
             <strong>Sleep:</strong>
