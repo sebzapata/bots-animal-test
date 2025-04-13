@@ -1,26 +1,75 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
+type metric = {
+  date: Date;
+  level: number;
+};
+
 const Animal = () => {
-  const [happinessLevel, setHappinessLevel] = useState({
+  const [happiness, setHappiness] = useState<metric>({
     date: new Date(),
-    happinessLevel: 80,
+    level: 80,
+  });
+  const [hunger, setHunger] = useState<metric>({
+    date: new Date(),
+    level: 60,
+  });
+  const [sleep, setSleep] = useState<metric>({
+    date: new Date(),
+    level: 50,
   });
 
   const increaseHappiness = () => {
     const datePlayedWith = new Date();
 
-    setHappinessLevel((prevState) => {
-      if (prevState.happinessLevel <= 95) {
+    setHappiness((prevState) => {
+      if (prevState.level <= 95) {
         return {
           date: datePlayedWith,
-          happinessLevel: prevState.happinessLevel + 5,
+          level: prevState.level + 5,
         };
       }
 
       return {
         date: datePlayedWith,
-        happinessLevel: 100,
+        level: 100,
+      };
+    });
+  };
+
+  const decreaseHunger = () => {
+    const dateFed = new Date();
+
+    setHunger((prevState) => {
+      if (prevState.level >= 5) {
+        return {
+          date: dateFed,
+          level: prevState.level - 5,
+        };
+      }
+
+      return {
+        date: dateFed,
+        level: 0,
+      };
+    });
+  };
+
+  const increaseSleep = () => {
+    const dateRested = new Date();
+
+    setSleep((prevState) => {
+      if (prevState.level <= 95) {
+        return {
+          date: dateRested,
+          level: prevState.level + 5,
+        };
+      }
+
+      return {
+        date: dateRested,
+        level: 100,
       };
     });
   };
@@ -29,10 +78,24 @@ const Animal = () => {
     const refreshTime = 1000;
 
     const interval = setInterval(() => {
-      if (happinessLevel.happinessLevel > 0) {
-        setHappinessLevel((prevState) => ({
+      if (happiness.level > 0) {
+        setHappiness((prevState) => ({
           ...prevState,
-          happinessLevel: prevState.happinessLevel - 1,
+          level: prevState.level - 1,
+        }));
+      }
+
+      if (hunger.level < 100) {
+        setHunger((prevState) => ({
+          ...prevState,
+          level: prevState.level + 1,
+        }));
+      }
+
+      if (sleep.level > 0) {
+        setSleep((prevState) => ({
+          ...prevState,
+          level: prevState.level - 1,
         }));
       }
     }, refreshTime);
@@ -40,7 +103,7 @@ const Animal = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [happinessLevel.happinessLevel]);
+  }, [happiness.level, hunger.level, sleep.level]);
 
   return (
     <>
@@ -56,35 +119,53 @@ const Animal = () => {
         </div>
         <div className="animal-stats">
           <div className="stat">
-            <strong>Hunger:</strong>
-            <div className="meter">
-              <div className="meter-fill" style={{ width: "60%" }}></div>
-            </div>
-            <button className="action-button">Feed</button>
-          </div>
-          <div className="stat">
-            <strong>{`Happiness: ${happinessLevel.happinessLevel}`}</strong>
+            <strong>{`Hunger: ${hunger.level}`}</strong>
             <div className="meter">
               <div
                 className="meter-fill"
-                style={{ width: `${happinessLevel.happinessLevel}%` }}
+                style={{ width: `${hunger.level}%` }}
+              ></div>
+            </div>
+            <button
+              className="action-button"
+              onClick={decreaseHunger}
+              disabled={hunger.level <= 0}
+            >
+              Feed
+            </button>
+          </div>
+          <div className="stat">
+            <strong>{`Happiness: ${happiness.level}`}</strong>
+            <div className="meter">
+              <div
+                className="meter-fill"
+                style={{ width: `${happiness.level}%` }}
               ></div>
             </div>
 
             <button
               className="action-button"
               onClick={increaseHappiness}
-              disabled={happinessLevel.happinessLevel >= 100}
+              disabled={happiness.level >= 100}
             >
               Play
             </button>
           </div>
           <div className="stat">
-            <strong>Sleep:</strong>
+            <strong>{`Sleep: ${sleep.level}`}</strong>
             <div className="meter">
-              <div className="meter-fill" style={{ width: "50%" }}></div>
+              <div
+                className="meter-fill"
+                style={{ width: `${sleep.level}%` }}
+              ></div>
             </div>
-            <button className="action-button">Rest</button>
+            <button
+              className="action-button"
+              onClick={increaseSleep}
+              disabled={sleep.level >= 100}
+            >
+              Rest
+            </button>
           </div>
         </div>
       </div>
