@@ -128,6 +128,11 @@ const Animal = ({ name, breed }: AnimalProps) => {
 
         let happinessDecreaseFactor;
 
+        const isSleepinessOrHungerFull =
+          sleepiness.level >= 100 || hunger.level >= 100;
+
+        const sleepAndHungerFactor = isSleepinessOrHungerFull ? 2 : 1;
+
         if (dogsList.includes(breed)) {
           happinessDecreaseFactor = 1.25;
         } else if (catsList.includes(breed)) {
@@ -139,7 +144,8 @@ const Animal = ({ name, breed }: AnimalProps) => {
         setHappiness((prevState) => ({
           ...prevState,
           level: Math.round(
-            prevState.baseLevel - timeSinceLastPlay * happinessDecreaseFactor
+            prevState.baseLevel -
+              timeSinceLastPlay * happinessDecreaseFactor * sleepAndHungerFactor
           ),
         }));
       }
