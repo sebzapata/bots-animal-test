@@ -24,9 +24,7 @@ function App() {
       <button onClick={() => setIsSideDrawerOpen(true)}>Add Animal</button>
 
       <div
-        className={`animal-wrapper && ${
-          isSideDrawerOpen ? "blurMainPage" : ""
-        }`}
+        className={`animal-wrapper ${isSideDrawerOpen ? "blurMainPage" : ""}`}
       >
         {!listOfPets.length && (
           <p>
@@ -35,13 +33,15 @@ function App() {
             one.
           </p>
         )}
-        {listOfPets.map((pet, index) => (
-          <Animal
-            name={pet.name}
-            breed={pet.breed}
-            key={`${pet.name}-${index}`}
-          />
-        ))}
+        <div className="animalWrapper--displaySection">
+          {listOfPets.map((pet, index) => (
+            <Animal
+              name={pet.name}
+              breed={pet.breed}
+              key={`${pet.name}-${index}`}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );

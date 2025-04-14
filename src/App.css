@@ -90,13 +90,27 @@ button:focus-visible {
   gap: 20px;
 }
 
+.animalWrapper--displaySection {
+  display: grid;
+  grid-column-gap: 1rem;
+  grid-row-gap: 1rem;
+  grid-template-columns: repeat(1, 1fr);
+
+  @media (min-width: 830px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1230px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 .blurMainPage {
   opacity: 20%;
 }
 
 .animal-container {
   text-align: center;
-  margin: 20px auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 10px;
